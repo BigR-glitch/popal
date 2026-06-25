@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Popal Photography — London</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0e0e0e;
+    --white: #ffffff;
+    --off-white: #f7f5f2;
+    --grey: #9a9a9a;
+    --light-grey: #e8e6e2;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'Jost', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  /* ─── SPA PAGE SYSTEM ────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  @keyframes pageFade {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* ─── SPLASH ─────────────────────────────────────── */
+  #splash {
+    position: fixed;
+    inset: 0;
+    background: var(--black);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  #splash.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .splash-monogram {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 140px;
+    height: 120px;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.3s forwards;
+  }
+
+  .splash-monogram .p1 {
+    font-family: var(--serif);
+    font-size: 110px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    position: absolute;
+    left: 0;
+    letter-spacing: -4px;
+  }
+
+  .splash-monogram .p2 {
+    font-family: var(--serif);
+    font-size: 110px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    position: absolute;
+    right: 0;
+    transform: scaleX(-1);
+    opacity: 0.35;
+    letter-spacing: -4px;
+  }
+
+  .splash-divider {
+    width: 0;
+    height: 0.6px;
+    background: rgba(255,255,255,0.4);
+    animation: expandLine 0.8s ease 1s forwards;
+    margin: 16px 0 14px;
+  }
+
+  .splash-brand {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 10px;
+    color: var(--white);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.2s forwards;
+  }
+
+  .splash-sub {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 5px;
+    color: rgba(255,255,255,0.45);
+    text-transform: uppercase;
+    margin-top: 6px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1.5s forwards;
+  }
+
+  .splash-enter {
+    margin-top: 48px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    border: none;
+    background: none;
+    cursor: pointer;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 2s forwards;
+    transition: color 0.3s;
+    padding: 12px 24px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+  }
+
+  .splash-enter:hover { color: var(--white); border-color: rgba(255,255,255,0.6); }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    transition: background 0.4s, padding 0.4s, border-color 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(10px);
+    padding: 16px 48px;
+    border-bottom: 0.5px solid var(--light-grey);
+  }
+
+  .nav-logo {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative; z-index: 1;
+  }
+
+  nav.scrolled .nav-logo { color: var(--black); }
+
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    position: absolute; left: 50%; transform: translateX(-50%);
+  }
+
+  .nav-links a {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.8);
+    text-decoration: none;
+    transition: color 0.3s;
+    position: relative;
+    padding-bottom: 3px;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: 0; left: 50%; right: 50%;
+    height: 0.5px; background: currentColor;
+    transition: left 0.3s, right 0.3s;
+  }
+
+  .nav-links a:hover::after,
+  .nav-links a.active::after { left: 0; right: 0; }
+
+  nav.scrolled .nav-links a { color: var(--grey); }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); }
+  nav.scrolled .nav-links a:hover,
+  nav.scrolled .nav-links a.active { color: var(--black); }
+
+  .nav-cta {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    text-decoration: none;
+    border: 0.5px solid rgba(255,255,255,0.5);
+    padding: 9px 20px;
+    transition: all 0.3s;
+    position: relative; z-index: 1;
+  }
+
+  nav.scrolled .nav-cta {
+    color: var(--black);
+    border-color: var(--black);
+  }
+
+  .nav-cta:hover { background: var(--white); color: var(--black); }
+  nav.scrolled .nav-cta:hover { background: var(--black); color: var(--white); }
+
+  /* ─── HAMBURGER ──────────────────────────────────── */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px; cursor: pointer;
+    z-index: 1; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    width: 24px; height: 0.8px;
+    background: var(--white); display: block; transition: all 0.3s;
+  }
+  nav.scrolled .hamburger span { background: var(--black); }
+
+  /* ─── MOBILE OVERLAY NAV ─────────────────────────── */
+  .mobile-nav {
+    display: none; position: fixed; inset: 0; z-index: 150;
+    background: var(--black);
+    flex-direction: column; align-items: center; justify-content: center; gap: 2.5rem;
+  }
+  .mobile-nav.open { display: flex; }
+  .mobile-nav a {
+    font-family: var(--serif); font-size: 2.8rem; font-weight: 300;
+    color: var(--white); text-decoration: none; letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .mobile-nav a:hover { color: rgba(255,255,255,0.5); }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  #hero {
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 48px 72px;
+  }
+
+  /* ─── HERO SLIDESHOW ─────────────────────────────── */
+  .hero-slides {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.6s ease;
+    transform: scale(1.06);
+  }
+
+  .hero-slide.active {
+    opacity: 1;
+    animation: heroKen 18s ease-in-out forwards;
+  }
+
+  @keyframes heroKen {
+    from { transform: scale(1.06); }
+    to   { transform: scale(1.0); }
+  }
+
+  /* Slide dot indicators */
+  .hero-dots {
+    position: absolute;
+    bottom: 2rem;
+    right: 48px;
+    display: flex;
+    gap: 8px;
+    z-index: 3;
+  }
+
+  .hero-dot {
+    width: 22px;
+    height: 1.5px;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.4s;
+    border: none;
+    padding: 0;
+  }
+
+  .hero-dot.active {
+    width: 40px;
+    background: var(--white);
+  }
+
+  /* Dark overlay */
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.1) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 700px;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(52px, 7vw, 88px);
+    font-weight: 300;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 300;
+  }
+
+  .hero-desc {
+    font-family: var(--sans);
+    font-size: 13px;
+    letter-spacing: 1px;
+    line-height: 1.8;
+    color: rgba(255,255,255,0.6);
+    max-width: 420px;
+    margin-bottom: 36px;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.6s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 1s ease 0.8s forwards;
+  }
+
+  .btn-primary {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    text-decoration: none;
+    padding: 14px 32px;
+    transition: all 0.3s;
+  }
+
+  .btn-primary:hover { background: var(--off-white); }
+
+  .btn-ghost {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.3s;
+  }
+
+  .btn-ghost::after {
+    content: '→';
+    font-size: 14px;
+    transition: transform 0.3s;
+  }
+
+  .btn-ghost:hover { color: var(--white); }
+  .btn-ghost:hover::after { transform: translateX(4px); }
+
+  /* scroll indicator */
+  .scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    right: 48px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeUp 1s ease 1.2s forwards;
+  }
+
+  .scroll-indicator span {
+    font-family: var(--sans);
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    writing-mode: vertical-rl;
+  }
+
+  .scroll-line {
+    width: 0.5px;
+    height: 60px;
+    background: rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.6);
+    animation: scrollDown 2s ease-in-out infinite;
+  }
+
+  /* ─── SECTION BASE ───────────────────────────────── */
+  section { padding: 100px 48px; }
+
+  .section-eyebrow {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--black);
+    margin-bottom: 20px;
+  }
+
+  .section-title em { font-style: italic; }
+
+  /* ─── INTRO ──────────────────────────────────────── */
+  #intro {
+    background: var(--black);
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 80px;
+    align-items: center;
+    padding: 120px 48px;
+  }
+
+  .intro-eyebrow-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .intro-line {
+    display: block;
+    width: 40px;
+    height: 0.5px;
+    background: rgba(255,255,255,0.3);
+    flex-shrink: 0;
+  }
+
+  .intro-left .section-eyebrow { color: rgba(255,255,255,0.35); }
+
+  .intro-headline {
+    font-family: var(--serif);
+    font-size: clamp(42px, 5vw, 68px);
+    font-weight: 300;
+    line-height: 1.08;
+    color: var(--white);
+    margin-bottom: 28px;
+  }
+
+  .intro-headline em { font-style: italic; font-weight: 300; }
+
+  .intro-body {
+    font-size: 13px;
+    line-height: 2;
+    color: rgba(255,255,255,0.45);
+    max-width: 380px;
+    margin-bottom: 52px;
+  }
+
+  .intro-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 40px;
+    padding-top: 40px;
+    border-top: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .intro-stat .stat-num {
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .intro-stat .stat-label {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    margin-top: 5px;
+  }
+
+  /* photo grid — mirrors the reference: tall left + two stacked right */
+  .intro-photo-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 12px;
+    height: 580px;
+  }
+
+  .intro-photo-main {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .intro-photo-main > div,
+  .intro-photo-small > div {
+    transition: transform 0.6s ease;
+  }
+
+  .intro-photo-main:hover > div { transform: scale(1.03); }
+  .intro-photo-small:hover > div { transform: scale(1.03); }
+
+  .intro-photo-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    height: 100%;
+  }
+
+  .intro-photo-small {
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ─── GALLERY ───────────────────────────────────── */
+  #gallery {
+    background: var(--off-white);
+    padding: 100px 48px;
+  }
+
+  .gallery-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 56px;
+  }
+
+  .filter-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .filter-tab {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey);
+    background: none;
+    border: 0.5px solid var(--light-grey);
+    padding: 9px 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .filter-tab.active, .filter-tab:hover {
+    background: var(--black);
+    color: var(--white);
+    border-color: var(--black);
+  }
+
+  .masonry {
+    columns: 3;
+    column-gap: 12px;
+  }
+
+  .masonry-item {
+    break-inside: avoid;
+    margin-bottom: 12px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+
+  .masonry-item img {
+    width: 100%;
+    display: block;
+    transition: transform 0.6s ease;
+    filter: grayscale(10%);
+  }
+
+  .masonry-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+
+  .masonry-item .overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    transition: background 0.4s;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+  }
+
+  .masonry-item:hover .overlay { background: rgba(0,0,0,0.3); }
+
+  .masonry-item .overlay span {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .masonry-item:hover .overlay span { opacity: 1; }
+
+  /* ─── SERVICES ───────────────────────────────────── */
+  #services,
+  #services-home {
+    background: var(--black);
+    color: var(--white);
+    padding: 100px 48px;
+  }
+
+  #services .section-eyebrow,
+  #services-home .section-eyebrow { color: rgba(255,255,255,0.35); }
+
+  #services .section-title,
+  #services-home .section-title { color: var(--white); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    margin-top: 60px;
+    border-top: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .service-item {
+    padding: 48px 40px 48px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+    border-right: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .service-item:nth-child(3n) { border-right: none; }
+
+  .service-num {
+    font-family: var(--serif);
+    font-size: 42px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.1);
+    margin-bottom: 20px;
+  }
+
+  .service-name {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+
+  .service-desc {
+    font-size: 12px;
+    line-height: 1.9;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* ─── ABOUT ──────────────────────────────────────── */
+  #about {
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    padding: 120px 48px;
+  }
+
+  .about-image {
+    height: 600px;
+    position: relative;
+  }
+
+  .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-image-label {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    background: var(--white);
+    padding: 12px 20px;
+  }
+
+  .about-image-label span {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  .about-text p {
+    font-size: 14px;
+    line-height: 2;
+    color: #555;
+    margin-bottom: 20px;
+  }
+
+  .about-text .signature {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--black);
+    margin-top: 32px;
+  }
+
+  /* ─── CONTACT / BOOK A SESSION ───────────────────── */
+  #contact {
+    background: var(--off-white);
+    padding: 100px 48px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book-heading h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 48px;
+    color: var(--black);
+  }
+
+  .book-heading h2 em { font-style: italic; }
+
+  .book-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .book-media { display: flex; flex-direction: column; gap: 24px; }
+
+  .book-img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background-size: cover;
+    background-position: center;
+    border: 0.5px solid var(--light-grey);
+  }
+
+  .book-quote {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 17px;
+    line-height: 1.6;
+    color: #555;
+  }
+
+  .contact-info h2 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 54px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 24px;
+    color: var(--black);
+  }
+
+  .contact-info h2 em { font-style: italic; }
+
+  .contact-info p {
+    font-size: 13px;
+    line-height: 2;
+    color: #666;
+    margin-bottom: 40px;
+  }
+
+  .contact-details { display: flex; flex-direction: column; gap: 28px; }
+
+  .contact-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-bottom: 22px;
+    border-bottom: 0.5px solid var(--light-grey);
+  }
+
+  .contact-row-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  .contact-row-label .icn { font-size: 12px; }
+
+  .contact-row-val {
+    font-family: var(--sans);
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--black);
+    text-decoration: none;
+  }
+
+  .contact-row-val:hover { text-decoration: underline; }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: var(--white);
+    border: 0.5px solid var(--light-grey);
+    padding: 48px;
+  }
+
+  .contact-form .section-eyebrow,
+  .contact-form h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--black);
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 8px;
+  }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+
+  .form-group label {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--grey);
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--black);
+    background: var(--off-white);
+    border: 0.5px solid var(--light-grey);
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    appearance: none;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus {
+    border-color: var(--black);
+  }
+
+  .form-group textarea { height: 120px; resize: vertical; }
+
+  .wa-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 16px 32px;
+    transition: background 0.3s;
+    margin-top: 8px;
+  }
+
+  .wa-btn:hover { background: #1ebe5a; }
+
+  .wa-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #25D366;
+    color: var(--white);
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    padding: 18px 32px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .wa-submit-btn:hover { background: #1ebe5a; }
+
+  .submit-btn {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--black);
+    border: none;
+    padding: 18px 32px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .submit-btn:hover { background: #333; }
+
+  /* ─── REACH OUT (CONTACT) SECTION ───────────────── */
+  #reachout {
+    background: #0e0e0e;
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: start;
+  }
+
+  .reachout-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #cda468;
+    margin-bottom: 24px;
+  }
+
+  .reachout-eyebrow .line { width: 32px; height: 1px; background: #cda468; display: inline-block; }
+
+  .reachout-title {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: #ffffff;
+    margin-bottom: 48px;
+  }
+
+  .reachout-title em { font-style: italic; color: #cda468; }
+
+  .reachout-details { display: flex; flex-direction: column; gap: 28px; }
+
+  .reachout-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .reachout-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #cda468;
+  }
+
+  .reachout-label .icn { font-size: 12px; }
+
+  .reachout-val {
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.75);
+    text-decoration: none;
+  }
+
+  .reachout-val:hover { color: #e3c794; }
+
+  .reachout-card {
+    background: #161616;
+    border: 0.5px solid rgba(255,255,255,0.1);
+    padding: 48px;
+  }
+
+  .reachout-card h3 {
+    font-family: var(--serif);
+    font-size: 24px;
+    font-weight: 400;
+    color: #ffffff;
+    margin-bottom: 24px;
+  }
+
+  .reachout-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .reachout-field { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+  .reachout-field label {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #cda468;
+  }
+
+  .reachout-field input,
+  .reachout-field textarea {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 300;
+    color: #ffffff;
+    background: #1f1f1f;
+    border: 0.5px solid rgba(255,255,255,0.15);
+    padding: 14px 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    width: 100%;
+    appearance: none;
+  }
+
+  .reachout-field input::placeholder,
+  .reachout-field textarea::placeholder { color: rgba(255,255,255,0.35); }
+
+  .reachout-field input:focus,
+  .reachout-field textarea:focus { border-color: #cda468; }
+
+  .reachout-field textarea { height: 120px; resize: vertical; }
+
+  .reachout-submit {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #0e0e0e;
+    background: #cda468;
+    border: none;
+    padding: 18px 32px;
+    cursor: pointer;
+    transition: background 0.3s;
+    width: 100%;
+  }
+
+  .reachout-submit:hover { background: #e3c794; }
+
+  /* ─── FOOTER ─────────────────────────────────────── */
+  footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-logo {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+  }
+
+  .footer-copy {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  .footer-social {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .social-pill {
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    border-radius: 50%; color: rgba(255,255,255,0.55); text-decoration: none;
+    background: transparent; overflow: hidden; isolation: isolate;
+    transition: border-color 0.35s, transform 0.3s, color 0.3s;
+  }
+  .social-pill::before {
+    content: ''; position: absolute; inset: 0; z-index: -1;
+    background: var(--white);
+    transform: translateY(105%); transition: transform 0.35s ease;
+  }
+  .social-pill svg { width: 16px; height: 16px; flex-shrink: 0; position: relative; z-index: 1; transition: color 0.3s; }
+  .social-pill:hover { border-color: var(--white); transform: translateY(-3px); }
+  .social-pill:hover::before { transform: translateY(0); }
+  .social-pill:hover svg { color: var(--black); }
+
+  /* ─── LIGHTBOX ───────────────────────────────────── */
+  #lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #lightbox.open { display: flex; }
+
+  #lightbox img {
+    max-width: 85vw;
+    max-height: 85vh;
+    object-fit: contain;
+  }
+
+  #lightbox-close {
+    position: absolute;
+    top: 24px;
+    right: 32px;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.3s;
+  }
+
+  #lightbox-close:hover { color: var(--white); }
+
+  /* ─── ANIMATIONS ─────────────────────────────────── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes expandLine {
+    from { width: 0; }
+    to   { width: 260px; }
+  }
+
+  @keyframes scrollDown {
+    0%   { top: -100%; }
+    100% { top: 100%; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ─── RESPONSIVE ─────────────────────────────────── */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    section, #intro, #about, #contact { padding: 72px 24px; }
+    #intro, #about { grid-template-columns: 1fr; gap: 48px; }
+    .intro-photo-grid { height: 420px; }
+    .intro-body { max-width: 100%; margin-bottom: 36px; }
+    .book-grid { grid-template-columns: 1fr; gap: 48px; }
+    #reachout { grid-template-columns: 1fr; gap: 48px; padding: 72px 24px; }
+    .reachout-card { padding: 32px; }
+    .reachout-form-row { grid-template-columns: 1fr; }
+    .contact-form { padding: 32px; }
+    .form-row { grid-template-columns: 1fr; }
+    #hero { padding: 0 24px 60px; }
+    .masonry { columns: 2; }
+    .services-grid { grid-template-columns: 1fr; }
+    .service-item { border-right: none; padding-right: 0; }
+    footer { flex-direction: column; gap: 20px; text-align: center; }
+    .gallery-header { flex-direction: column; align-items: flex-start; gap: 20px; }
+    .intro-image { height: 380px; }
+    .about-image { height: 400px; }
+  }
+
+  @media (max-width: 500px) {
+    .masonry { columns: 1; }
+    .hero-title { font-size: 42px; }
+  }
+  /* ─── PRICING ────────────────────────────────────── */
+  #pricing-section {
+    background: var(--black);
+    padding: 120px 48px 100px;
+    min-height: 100vh;
+  }
+
+  .pricing-header {
+    text-align: center;
+    margin-bottom: 72px;
+  }
+
+  .pricing-header .section-eyebrow { color: rgba(255,255,255,0.35); }
+
+  .pricing-header .section-title {
+    color: var(--white);
+    font-size: clamp(40px, 5vw, 64px);
+  }
+
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .pricing-card {
+    background: #141414;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    padding: 48px 40px 40px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 0.3s;
+  }
+
+  .pricing-card:hover {
+    border-color: rgba(255,255,255,0.18);
+  }
+
+  .pricing-card.featured {
+    border-color: rgba(255,255,255,0.22);
+    background: #191919;
+  }
+
+  .pricing-badge {
+    position: absolute;
+    top: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--sans);
+    font-size: 8px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 6px 18px;
+  }
+
+  .pricing-icon {
+    font-size: 28px;
+    margin-bottom: 24px;
+    line-height: 1;
+  }
+
+  .pricing-name {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .pricing-tagline {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .pricing-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 32px;
+    padding-bottom: 32px;
+    border-bottom: 0.5px solid rgba(255,255,255,0.08);
+  }
+
+  .pricing-currency {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+  }
+
+  .pricing-amount {
+    font-family: var(--serif);
+    font-size: 56px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .pricing-per {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+  }
+
+  .pricing-features {
+    list-style: none;
+    flex: 1;
+    margin-bottom: 40px;
+  }
+
+  .pricing-features li {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.55);
+    padding: 9px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.05);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .pricing-features li::before {
+    content: '✦';
+    font-size: 7px;
+    color: rgba(255,255,255,0.25);
+    flex-shrink: 0;
+  }
+
+  .pricing-features li.muted {
+    color: rgba(255,255,255,0.18);
+  }
+
+  .pricing-features li.muted::before {
+    content: '—';
+    color: rgba(255,255,255,0.12);
+  }
+
+  .pricing-btn {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s;
+    display: block;
+  }
+
+  .pricing-btn-outline {
+    color: rgba(255,255,255,0.6);
+    border: 0.5px solid rgba(255,255,255,0.2);
+    background: transparent;
+  }
+
+  .pricing-btn-outline:hover {
+    background: rgba(255,255,255,0.06);
+    color: var(--white);
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  .pricing-btn-solid {
+    color: var(--black);
+    background: var(--white);
+  }
+
+  .pricing-btn-solid:hover {
+    background: var(--off-white);
+  }
+
+  @media (max-width: 900px) {
+    .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+    #pricing-section { padding: 100px 24px 72px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+  <div class="splash-monogram">
+    <span class="p1">P</span>
+    <span class="p2">P</span>
+  </div>
+  <div class="splash-divider"></div>
+  <div class="splash-brand">Popal</div>
+  <div class="splash-sub">Photography · London</div>
+  <button class="splash-enter" onclick="enterSite()">Enter ›</button>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lightbox">
+  <button id="lightbox-close" onclick="closeLightbox()">Close ×</button>
+  <img id="lightbox-img" src="" alt="">
+</div>
+
+<!-- MOBILE NAV -->
+<div class="mobile-nav" id="mobileNav">
+  <a href="#" onclick="showPage('home'); closeMobileNav(); return false;">Home</a>
+  <a href="#" onclick="showPage('gallery'); closeMobileNav(); return false;">Gallery</a>
+  <a href="#" onclick="showPage('about'); closeMobileNav(); return false;">About</a>
+  <a href="#" onclick="showPage('pricing'); closeMobileNav(); return false;">Pricing</a>
+  <a href="#" onclick="showPage('contact'); closeMobileNav(); return false;">Contact</a>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo" onclick="showPage('home'); return false;">Popal</a>
+  <ul class="nav-links">
+    <li><a href="#" onclick="showPage('home'); return false;" data-page="home">Home</a></li>
+    <li><a href="#" onclick="showPage('gallery'); return false;" data-page="gallery">Gallery</a></li>
+    <li><a href="#" onclick="showPage('about'); return false;" data-page="about">About</a></li>
+    <li><a href="#" onclick="showPage('pricing'); return false;" data-page="pricing">Pricing</a></li>
+    <li><a href="#" onclick="showPage('contact'); return false;" data-page="contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="showPage('contact'); return false;">Book a session</a>
+  <button class="hamburger" id="hamburger" onclick="toggleMobileNav()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══ HOME PAGE ══ -->
+<div class="page active" id="page-home">
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-slides" id="heroSlides">
+    <div class="hero-slide active" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=85');"></div>
+    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=1600&q=85');"></div>
+    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=85');"></div>
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">South Kensington, London</p>
+    <h1 class="hero-title">Urban life,<br><em>captured honestly</em></h1>
+    <p class="hero-desc">Street portraits, lifestyle sessions, and film — shot across the streets of London with five years of raw, unfiltered vision.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary" onclick="showPage('gallery'); return false;">View Gallery</a>
+      <a href="#" class="btn-ghost" onclick="showPage('contact'); return false;">Book a session</a>
+    </div>
+  </div>
+  <div class="hero-dots" id="heroDots">
+    <button class="hero-dot active" onclick="goSlide(0)"></button>
+    <button class="hero-dot" onclick="goSlide(1)"></button>
+    <button class="hero-dot" onclick="goSlide(2)"></button>
+  </div>
+</section>
+
+<!-- INTRO (part of home) -->
+<section id="intro">
+  <div class="intro-left reveal">
+    <div class="intro-eyebrow-row">
+      <span class="intro-line"></span>
+      <span class="section-eyebrow" style="margin-bottom:0;">Selected Work</span>
+    </div>
+    <h2 class="intro-headline">Moments That<br><em>Endure</em></h2>
+    <p class="intro-body">Every frame tells a real story. Based in South Kensington, Junaid Popal brings five years of photography and film experience — honed between Kabul and London — into every project. Real people, real moments, real light.</p>
+    <div class="intro-stats">
+      <div class="intro-stat">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Years Experience</div>
+      </div>
+      <div class="intro-stat">
+        <div class="stat-num">168</div>
+        <div class="stat-label">Published Works</div>
+      </div>
+      <div class="intro-stat">
+        <div class="stat-num">4.7k</div>
+        <div class="stat-label">Followers</div>
+      </div>
+      <div class="intro-stat">
+        <div class="stat-num">∞</div>
+        <div class="stat-label">Based in London</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="intro-photo-grid reveal">
+    <!-- Large portrait left -->
+    <div class="intro-photo-main">
+      <div style="width:100%;height:100%;background:linear-gradient(160deg,#b0a898,#8a7e72);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:13px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Portrait</span>
+      </div>
+    </div>
+    <!-- Two stacked images right -->
+    <div class="intro-photo-stack">
+      <div class="intro-photo-small">
+        <div style="width:100%;height:100%;background:linear-gradient(160deg,#c8bfb4,#a09080);display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:var(--serif);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.5)">Lifestyle</span>
+        </div>
+      </div>
+      <div class="intro-photo-small">
+        <div style="width:100%;height:100%;background:linear-gradient(160deg,#2a2a2a,#404040);display:flex;align-items:center;justify-content:center;">
+          <span style="font-family:var(--serif);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.35)">Film</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES (homepage) -->
+<section id="services-home">
+  <div class="reveal">
+    <p class="section-eyebrow">What I offer</p>
+    <h2 class="section-title">Services</h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-item reveal">
+      <div class="service-num">01</div>
+      <div class="service-name">Lifestyle Photography</div>
+      <p class="service-desc">Authentic everyday moments captured with intention — for personal brands, social media, and editorial use. London and surrounding areas.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">02</div>
+      <div class="service-name">Portrait Sessions</div>
+      <p class="service-desc">Individual and group portraits in natural or studio light. Clean, contemporary, and true to who you are.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">03</div>
+      <div class="service-name">Event Coverage</div>
+      <p class="service-desc">Full event photography from intimate gatherings to large productions. Discreet, fast, and comprehensive.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">04</div>
+      <div class="service-name">Film & Video</div>
+      <p class="service-desc">Short-form video content, reels, and cinematic brand films. Five years of combined photo and video experience.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">05</div>
+      <div class="service-name">Brand Content</div>
+      <p class="service-desc">Visual content packages for businesses and personal brands — cohesive, on-brief, and designed to perform on every platform.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- end #page-home -->
+
+<!-- ══ GALLERY PAGE ══ -->
+<div class="page" id="page-gallery">
+<section id="gallery" style="padding-top: 100px;">
+  <div class="gallery-header reveal">
+    <div>
+      <p class="section-eyebrow">Selected work</p>
+      <h2 class="section-title">Gallery</h2>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterGallery('all', this)">All</button>
+      <button class="filter-tab" onclick="filterGallery('lifestyle', this)">Lifestyle</button>
+      <button class="filter-tab" onclick="filterGallery('portrait', this)">Portraits</button>
+      <button class="filter-tab" onclick="filterGallery('film', this)">Film</button>
+    </div>
+  </div>
+
+  <div class="masonry" id="gallery-grid">
+
+    <!-- LIFESTYLE -->
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:320px;background:linear-gradient(160deg,#c8bfb4,#a09080);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:380px;background:linear-gradient(160deg,#d0c8bc,#b0a898);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:260px;background:linear-gradient(160deg,#c0b8ac,#a09890);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:360px;background:linear-gradient(160deg,#d6cdc0,#b4a896);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:300px;background:linear-gradient(160deg,#e0d8cc,#c4b8a8);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:420px;background:linear-gradient(160deg,#bbb0a4,#948880);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:280px;background:linear-gradient(160deg,#ccc4b8,#a89e94);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
+      <div style="height:340px;background:linear-gradient(160deg,#d8d0c4,#b8ac9e);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
+      </div>
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+
+    <!-- PORTRAIT -->
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:420px;background:linear-gradient(160deg,#b0a898,#8a7e72);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:360px;background:linear-gradient(160deg,#a89e94,#8a8078);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:300px;background:linear-gradient(160deg,#9c948a,#7a726a);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:400px;background:linear-gradient(160deg,#c0b4a8,#9c9088);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:280px;background:linear-gradient(160deg,#908880,#6e6660);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:460px;background:linear-gradient(160deg,#b8b0a4,#908880);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
+      <div style="height:320px;background:linear-gradient(160deg,#a4988c,#827870);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
+      </div>
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+
+    <!-- FILM -->
+    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
+      <div style="height:300px;background:linear-gradient(160deg,#1a1a2e,#2a2a40);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
+      </div>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
+      <div style="height:340px;background:linear-gradient(160deg,#222238,#1a1a30);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
+      </div>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
+      <div style="height:280px;background:linear-gradient(160deg,#1e1e30,#2c2c45);display:flex;align-items:center;justify-content:center;">
+        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
+      </div>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- end #page-gallery -->
+
+<!-- ══ SERVICES PAGE ══ -->
+<div class="page" id="page-services">
+<section id="services" style="padding-top: 120px;">
+  <div class="reveal">
+    <p class="section-eyebrow">What I offer</p>
+    <h2 class="section-title">Services</h2>
+  </div>
+  <div class="services-grid">
+    <div class="service-item reveal">
+      <div class="service-num">01</div>
+      <div class="service-name">Lifestyle Photography</div>
+      <p class="service-desc">Authentic everyday moments captured with intention — for personal brands, social media, and editorial use. London and surrounding areas.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">02</div>
+      <div class="service-name">Portrait Sessions</div>
+      <p class="service-desc">Individual and group portraits in natural or studio light. Clean, contemporary, and true to who you are.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">03</div>
+      <div class="service-name">Event Coverage</div>
+      <p class="service-desc">Full event photography from intimate gatherings to large productions. Discreet, fast, and comprehensive.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">04</div>
+      <div class="service-name">Film & Video</div>
+      <p class="service-desc">Short-form video content, reels, and cinematic brand films. Five years of combined photo and video experience.</p>
+    </div>
+    <div class="service-item reveal">
+      <div class="service-num">05</div>
+      <div class="service-name">Brand Content</div>
+      <p class="service-desc">Visual content packages for businesses and personal brands — cohesive, on-brief, and designed to perform on every platform.</p>
+    </div>
+  </div>
+</section>
+
+</div><!-- end #page-services -->
+
+<!-- ══ ABOUT PAGE ══ -->
+<div class="page" id="page-about">
+<section id="about" style="padding-top: 120px;">
+  <div class="about-image reveal">
+    <div style="width:100%;height:100%;background:linear-gradient(160deg,#2a2520,#1a1510);display:flex;align-items:center;justify-content:center;">
+      <span style="font-family:var(--serif);font-size:14px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.2)">Junaid Popal</span>
+    </div>
+    <div class="about-image-label">
+      <span>South Kensington · London</span>
+    </div>
+  </div>
+  <div class="about-text reveal">
+    <p class="section-eyebrow">The photographer</p>
+    <h2 class="section-title">Junaid<br><em>Popal</em></h2>
+    <p>Originally from Afghanistan, now rooted in London — Junaid Popal has spent five years building a visual language that bridges cultures, captures honesty, and finds beauty in the unremarkable.</p>
+    <p>Based in South Kensington, he works across lifestyle, portrait, and film — always with the same philosophy: don't arrange the world, observe it.</p>
+    <p>His clients range from personal brand builders to event organisers across London. He is available for commissions across the UK and internationally.</p>
+    <div class="signature">Junaid Popal</div>
+    <br>
+    <a href="https://www.instagram.com/junaid.photographer" target="_blank" style="font-family:var(--sans);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--grey);text-decoration:none;border-bottom:0.5px solid var(--light-grey);padding-bottom:4px;">@junaid.photographer ↗</a>
+  </div>
+</section>
+
+</div><!-- end #page-about -->
+
+<!-- ══ CONTACT PAGE ══ -->
+<div class="page" id="page-contact">
+<section id="contact" style="padding-top: 120px;">
+  <div class="book-heading reveal">
+    <p class="section-eyebrow">Get in touch</p>
+    <h2>Let's Create<br><em>Something Beautiful</em></h2>
+  </div>
+
+  <div class="book-grid">
+    <div class="book-media reveal">
+      <div class="book-img" style="background-image: url('https://images.unsplash.com/photo-1606800052052-a08af7148866?w=900&q=85');"></div>
+      <p class="book-quote">"Every great photograph begins with a single, courageous conversation."</p>
+    </div>
+
+    <div class="contact-form reveal">
+      <div class="form-row">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" placeholder="Abena">
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" placeholder="Mensah">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label>Phone / WhatsApp</label>
+        <input type="text" placeholder="+233 27 502 1123">
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Session Type</label>
+          <select>
+            <option value="">Select a service...</option>
+            <option>Lifestyle Photography</option>
+            <option>Portrait Session</option>
+            <option>Event Coverage</option>
+            <option>Film &amp; Video</option>
+            <option>Brand Content</option>
+            <option>Masterclass</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Preferred Date</label>
+          <input type="date">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Tell us about your vision</label>
+        <textarea placeholder="Share your ideas, the story you want to tell, any special requests..."></textarea>
+      </div>
+      <button class="wa-submit-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Send via WhatsApp
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ══ REACH OUT (CONTACT) SECTION ══ -->
+<section id="reachout">
+  <div class="reachout-info reveal">
+    <div class="reachout-eyebrow"><span class="line"></span> Reach Out</div>
+    <h2 class="reachout-title">We'd Love to <em>Hear From You</em></h2>
+    <div class="reachout-details">
+      <div class="reachout-row">
+        <span class="reachout-label"><span class="icn">📍</span> Studio Address</span>
+        <span class="reachout-val">South Kensington, London</span>
+      </div>
+      <div class="reachout-row">
+        <span class="reachout-label"><span class="icn">📞</span> Phone &amp; WhatsApp</span>
+        <a href="https://wa.me/447342288816" class="reachout-val">+44 7342 288816</a>
+      </div>
+      <div class="reachout-row">
+        <span class="reachout-label"><span class="icn">📧</span> Email</span>
+        <a href="mailto:londonfilms911@gmail.com" class="reachout-val">londonfilms911@gmail.com</a>
+      </div>
+      <div class="reachout-row">
+        <span class="reachout-label"><span class="icn">🕐</span> Studio Hours</span>
+        <span class="reachout-val">Monday – Friday: 9am – 6pm<br>Saturday: 9am – 4pm<br>Sunday: By appointment</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="reachout-card reveal">
+    <h3>Send a Message</h3>
+    <div class="reachout-form-row">
+      <div class="reachout-field">
+        <label>Name</label>
+        <input type="text" placeholder="Your name">
+      </div>
+      <div class="reachout-field">
+        <label>Email</label>
+        <input type="email" placeholder="your@email.com">
+      </div>
+    </div>
+    <div class="reachout-field">
+      <label>Subject</label>
+      <input type="text" placeholder="How can we help?">
+    </div>
+    <div class="reachout-field">
+      <label>Message</label>
+      <textarea placeholder="Tell us more..."></textarea>
+    </div>
+    <button class="reachout-submit">Send Message</button>
+  </div>
+</section>
+</div><!-- end #page-contact -->
+
+<!-- ══ PRICING PAGE ══ -->
+<div class="page" id="page-pricing">
+<section id="pricing-section">
+  <div class="pricing-header reveal">
+    <p class="section-eyebrow">Investment</p>
+    <h2 class="section-title">Choose Your <em>Experience</em></h2>
+  </div>
+
+  <div class="pricing-grid">
+
+    <!-- Essentials -->
+    <div class="pricing-card reveal">
+      <div class="pricing-icon">🌿</div>
+      <div class="pricing-name">Essentials</div>
+      <div class="pricing-tagline">Perfect for portrait sessions &amp; quick shoots</div>
+      <div class="pricing-price-row">
+        <span class="pricing-currency">GH₵</span>
+        <span class="pricing-amount">800</span>
+        <span class="pricing-per">/ session</span>
+      </div>
+      <ul class="pricing-features">
+        <li>2-hour studio session</li>
+        <li>1 outfit / look</li>
+        <li>20 edited digital images</li>
+        <li>Online gallery delivery</li>
+        <li class="muted">Location shoot</li>
+        <li class="muted">Print products</li>
+      </ul>
+      <a href="#" class="pricing-btn pricing-btn-outline" onclick="showPage('contact'); return false;">Book Now</a>
+    </div>
+
+    <!-- Signature -->
+    <div class="pricing-card featured reveal">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-icon">✦</div>
+      <div class="pricing-name">Signature</div>
+      <div class="pricing-tagline">Our most sought-after experience</div>
+      <div class="pricing-price-row">
+        <span class="pricing-currency">GH₵</span>
+        <span class="pricing-amount">2,200</span>
+        <span class="pricing-per">/ session</span>
+      </div>
+      <ul class="pricing-features">
+        <li>Full-day session (8 hours)</li>
+        <li>Multiple looks / locations</li>
+        <li>60 fully edited images</li>
+        <li>Online gallery + USB</li>
+        <li>Styling consultation</li>
+        <li>1 fine-art print included</li>
+      </ul>
+      <a href="#" class="pricing-btn pricing-btn-solid" onclick="showPage('contact'); return false;">Book Now</a>
+    </div>
+
+    <!-- Bespoke -->
+    <div class="pricing-card reveal">
+      <div class="pricing-icon">👑</div>
+      <div class="pricing-name">Bespoke</div>
+      <div class="pricing-tagline">Tailored for corporate events &amp; large bookings</div>
+      <div class="pricing-price-row">
+        <span class="pricing-currency">GH₵</span>
+        <span class="pricing-amount" style="font-size:44px;">Custom</span>
+      </div>
+      <ul class="pricing-features">
+        <li>Unlimited session time</li>
+        <li>Full creative direction</li>
+        <li>Unlimited edited images</li>
+        <li>Luxury album + prints</li>
+        <li>Dedicated project manager</li>
+        <li>Multi-photographer team available</li>
+      </ul>
+      <a href="#" class="pricing-btn pricing-btn-outline" onclick="showPage('contact'); return false;">Contact Us</a>
+    </div>
+
+  </div>
+</section>
+</div><!-- end #page-pricing -->
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Popal</div>
+  <div class="footer-copy">© 2025 Popal Photography · London</div>
+  <div class="footer-social">
+    <!-- Instagram -->
+    <a class="social-pill" href="https://instagram.com/junaid.photographer" target="_blank" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="12" r="4.4" stroke="currentColor" stroke-width="1.6"/><circle cx="17.4" cy="6.6" r="1.15" fill="currentColor"/></svg>
+    </a>
+    <!-- WhatsApp -->
+    <a class="social-pill" href="https://wa.me/447342288816" target="_blank" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.87.52 3.62 1.42 5.12L2 22l5.12-1.5a9.85 9.85 0 0 0 4.92 1.32c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2zm0 17.9c-1.6 0-3.1-.43-4.4-1.2l-.32-.19-3.27.96.96-3.18-.2-.32a7.9 7.9 0 0 1-1.27-4.06c0-4.39 3.57-7.96 7.96-7.96 4.39 0 7.96 3.57 7.96 7.96 0 4.4-3.57 7.99-7.96 7.99zm4.36-5.96c-.24-.12-1.41-.7-1.63-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.01-.37-1.92-1.18-.71-.63-1.19-1.41-1.33-1.65-.14-.24-.01-.37.11-.49.12-.12.27-.31.4-.47.13-.16.18-.27.27-.45.09-.18.04-.33-.04-.45-.08-.12-.5-1.21-.69-1.66-.18-.43-.37-.37-.51-.38-.13-.01-.29-.01-.45-.01-.16 0-.41.06-.63.3-.22.24-.85.83-.85 2.02 0 1.19.87 2.34 1 2.5.13.16 1.71 2.61 4.15 3.55 2.07.8 2.49.65 2.94.6.45-.05 1.41-.58 1.61-1.13.2-.55.2-1.03.14-1.13-.06-.1-.22-.16-.46-.28z"/></svg>
+    </a>
+    <!-- TikTok -->
+    <a class="social-pill" href="https://tiktok.com/@hamayoon.popal0" target="_blank" aria-label="TikTok">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.76a4.85 4.85 0 0 1-1.01-.07z"/></svg>
+    </a>
+    <!-- Snapchat -->
+    <a class="social-pill" href="https://snapchat.com/t/47r9bnTV" target="_blank" aria-label="Snapchat">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.166 2c.93 0 4.076.256 5.567 3.54.41.919.314 2.47.235 3.719-.016.244-.031.479-.04.698.14.072.318.125.537.125.286 0 .592-.096.902-.284a.463.463 0 0 1 .24-.068c.156 0 .313.076.413.213.147.2.12.463-.062.654-.028.03-.7.733-1.945.97-.618 1.494-1.882 2.883-3.913 4.13.302.146.67.23 1.069.23.52 0 1.072-.143 1.583-.413.236-.124.514-.079.683.11a.562.562 0 0 1-.067.78c-.134.108-3.374 2.666-9.373 1.128a8.17 8.17 0 0 1-1.007-.307c-1.07-.392-1.875-.97-2.352-1.69a.562.562 0 0 1-.095-.426.563.563 0 0 1 .214-.352c.17-.134.407-.166.61-.082.491.208 1.001.314 1.518.314.423 0 .815-.084 1.113-.236-2.03-1.247-3.295-2.636-3.912-4.13C2.63 9.903 1.96 9.2 1.93 9.17c-.181-.19-.208-.454-.063-.655a.464.464 0 0 1 .414-.213c.083 0 .165.023.24.068.309.188.615.284.9.284.224 0 .4-.055.54-.127-.008-.218-.024-.453-.04-.697-.08-1.25-.175-2.8.235-3.72C5.645 2.257 8.79 2 9.834 2h.332z"/></svg>
+    </a>
+    <!-- Threads -->
+    <a class="social-pill" href="https://threads.com/@junaid.in.uk" target="_blank" aria-label="Threads">
+      <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M12.186 2c-2.676 0-4.738.776-6.13 2.308C4.667 5.87 3.96 8.04 3.932 10.82v2.36c.028 2.78.735 4.95 2.124 6.512C7.448 21.224 9.51 22 12.186 22c2.433 0 4.334-.627 5.65-1.864 1.185-1.114 1.826-2.676 1.906-4.647h-2.464c-.078 1.32-.467 2.328-1.157 2.97-.742.688-1.84 1.034-3.263 1.034-1.738 0-3.035-.548-3.855-1.63-.746-.99-1.13-2.476-1.14-4.426v-2.36c.01-1.95.394-3.436 1.14-4.426.82-1.082 2.117-1.63 3.855-1.63 1.423 0 2.521.346 3.263 1.034.69.642 1.08 1.65 1.157 2.97h2.464c-.08-1.97-.721-3.533-1.906-4.647C16.52 2.627 14.619 2 12.186 2z"/></svg>
+    </a>
+  </div>
+</footer>
+
+<script>
+  // ── HERO SLIDESHOW ──
+  let currentSlide = 0;
+  const slideEls = document.querySelectorAll('.hero-slide');
+  const dotEls = document.querySelectorAll('.hero-dot');
+
+  function goSlide(n) {
+    slideEls[currentSlide].classList.remove('active');
+    dotEls[currentSlide].classList.remove('active');
+    currentSlide = (n + slideEls.length) % slideEls.length;
+    slideEls[currentSlide].classList.add('active');
+    dotEls[currentSlide].classList.add('active');
+  }
+
+  setInterval(() => goSlide(currentSlide + 1), 6000);
+
+  // ── SPA PAGE SYSTEM ──
+  const pages = ['home', 'gallery', 'services', 'about', 'pricing', 'contact'];
+
+  // Init: ensure only home is visible on load
+  document.addEventListener('DOMContentLoaded', () => {
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) el.style.display = (p === 'home') ? 'block' : 'none';
+    });
+  });
+
+  function showPage(id) {
+    // Hide all pages via inline style (overrides any CSS specificity issues)
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (el) { el.style.display = 'none'; el.classList.remove('active'); }
+    });
+    // Show target
+    const target = document.getElementById('page-' + id);
+    if (target) {
+      target.style.display = 'block';
+      target.classList.add('active');
+      // Fade in
+      target.style.opacity = '0';
+      target.style.transform = 'translateY(14px)';
+      target.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          target.style.opacity = '1';
+          target.style.transform = 'translateY(0)';
+        });
+      });
+      window.scrollTo(0, 0);
+      setTimeout(initReveal, 80);
+    }
+    // Active nav link highlight
+    document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === id);
+    });
+    // Nav appearance
+    const nav = document.getElementById('nav');
+    if (id === 'home') {
+      nav.classList.remove('scrolled');
+    } else {
+      nav.classList.add('scrolled');
+    }
+  }
+
+  // Mobile nav
+  function toggleMobileNav() {
+    document.getElementById('mobileNav').classList.toggle('open');
+    document.body.style.overflow = document.getElementById('mobileNav').classList.contains('open') ? 'hidden' : '';
+  }
+  function closeMobileNav() {
+    document.getElementById('mobileNav').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Splash
+  function enterSite() {
+    document.getElementById('splash').classList.add('hide');
+    document.body.style.overflow = 'auto';
+  }
+
+  setTimeout(() => {
+    document.getElementById('splash').classList.add('hide');
+    document.body.style.overflow = 'auto';
+  }, 4200);
+
+  document.body.style.overflow = 'hidden';
+
+  // Nav scroll — only apply on home page
+  window.addEventListener('scroll', () => {
+    const currentPage = pages.find(p => document.getElementById('page-' + p)?.classList.contains('active'));
+    if (currentPage === 'home') {
+      document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+    }
+  });
+
+  // Scroll reveal
+  function initReveal() {
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+      revealObserver.observe(el);
+    });
+  }
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  initReveal();
+
+  // Gallery filter
+  function filterGallery(cat, btn) {
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.masonry-item').forEach(item => {
+      item.style.display = (cat === 'all' || item.dataset.cat === cat) ? 'block' : 'none';
+    });
+  }
+
+  // Lightbox
+  function openLightbox(el) {
+    document.getElementById('lightbox').classList.add('open');
+  }
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+  }
+  document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this) closeLightbox();
+  });
+</script>
+</body>
+</html>
