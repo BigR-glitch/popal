@@ -618,51 +618,72 @@
     border-color: var(--black);
   }
 
+  /* ── Gallery grid — structured rows, clean columns ── */
   .masonry {
-    columns: 3;
-    column-gap: 12px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 10px;
+    gap: 8px;
   }
 
+  /* default: portrait ~380px */
   .masonry-item {
-    break-inside: avoid;
-    margin-bottom: 12px;
+    grid-row: span 38;
     overflow: hidden;
     position: relative;
     cursor: pointer;
   }
 
-  .masonry-item img {
-    width: 100%;
-    display: block;
-    transition: transform 0.6s ease;
-    filter: grayscale(10%);
+  /* landscape: spans 2 cols, shorter ~240px */
+  .masonry-item.land {
+    grid-column: span 2;
+    grid-row: span 24;
   }
 
-  .masonry-item:hover img { transform: scale(1.04); filter: grayscale(0%); }
+  /* small: compact ~260px */
+  .masonry-item.sm {
+    grid-row: span 26;
+  }
+
+  /* tall: elongated ~480px */
+  .masonry-item.tall {
+    grid-row: span 48;
+  }
+
+  .masonry-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.7s ease, filter 0.5s ease;
+    filter: grayscale(8%);
+  }
+
+  .masonry-item:hover img {
+    transform: scale(1.05);
+    filter: grayscale(0%);
+  }
 
   .masonry-item .overlay {
     position: absolute;
     inset: 0;
-    background: rgba(0,0,0,0);
-    transition: background 0.4s;
+    background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
     display: flex;
     align-items: flex-end;
-    padding: 20px;
+    padding: 18px 20px;
   }
 
-  .masonry-item:hover .overlay { background: rgba(0,0,0,0.3); }
+  .masonry-item:hover .overlay { opacity: 1; }
 
   .masonry-item .overlay span {
     font-family: var(--sans);
-    font-size: 9px;
-    letter-spacing: 3px;
+    font-size: 8px;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    color: var(--white);
-    opacity: 0;
-    transition: opacity 0.4s;
+    color: rgba(255,255,255,0.85);
   }
-
-  .masonry-item:hover .overlay span { opacity: 1; }
 
   /* ─── SERVICES ───────────────────────────────────── */
   #services,
@@ -1195,6 +1216,40 @@
 
   #lightbox-close:hover { color: var(--white); }
 
+  .lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: 0.5px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.7);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    font-size: 20px;
+    font-family: var(--sans);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s, border-color 0.3s, background 0.3s;
+  }
+
+  .lightbox-nav:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.08);
+  }
+
+  #lightbox-prev { left: 24px; }
+  #lightbox-next { right: 24px; }
+
+  @media (max-width: 640px) {
+    .lightbox-nav { width: 40px; height: 40px; font-size: 16px; }
+    #lightbox-prev { left: 10px; }
+    #lightbox-next { right: 10px; }
+  }
+
   /* ─── ANIMATIONS ─────────────────────────────────── */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -1462,7 +1517,9 @@
 <!-- LIGHTBOX -->
 <div id="lightbox">
   <button id="lightbox-close" onclick="closeLightbox()">Close ×</button>
+  <button id="lightbox-prev" class="lightbox-nav" onclick="navigateLightbox(-1)" aria-label="Previous image">‹</button>
   <img id="lightbox-img" src="" alt="">
+  <button id="lightbox-next" class="lightbox-nav" onclick="navigateLightbox(1)" aria-label="Next image">›</button>
 </div>
 
 <!-- MOBILE NAV -->
@@ -1496,9 +1553,9 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-slides" id="heroSlides">
-    <div class="hero-slide active" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1600&q=85');"></div>
-    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1504703395950-b89145a5425b?w=1600&q=85');"></div>
-    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1600&q=85');"></div>
+    <div class="hero-slide active" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434048/089A5869.JPG_nvhbqf.jpg');"></div>
+    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434053/IMG_8678.JPG_dwjj8j.jpg');"></div>
+    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433999/IMG_5743.JPG_nfnzga.jpg');"></div>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -1547,23 +1604,17 @@
   </div>
 
   <div class="intro-photo-grid reveal">
-    <!-- Large portrait left -->
+    <!-- Large portrait left — replace src="YOUR_IMAGE_URL_HERE" -->
     <div class="intro-photo-main">
-      <div style="width:100%;height:100%;background:linear-gradient(160deg,#b0a898,#8a7e72);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:13px;letter-spacing:4px;text-transform:uppercase;color:rgba(255,255,255,0.4)">Portrait</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434037/IMG_0982.JPG_vn2mk3.jpg" alt="Portrait" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
     </div>
-    <!-- Two stacked images right -->
+    <!-- Two stacked images right — replace src="YOUR_IMAGE_URL_HERE" -->
     <div class="intro-photo-stack">
       <div class="intro-photo-small">
-        <div style="width:100%;height:100%;background:linear-gradient(160deg,#c8bfb4,#a09080);display:flex;align-items:center;justify-content:center;">
-          <span style="font-family:var(--serif);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.5)">Lifestyle</span>
-        </div>
+        <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433998/IMG_8993.JPG_zfuapr.jpg" alt="Lifestyle" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
       </div>
       <div class="intro-photo-small">
-        <div style="width:100%;height:100%;background:linear-gradient(160deg,#2a2a2a,#404040);display:flex;align-items:center;justify-content:center;">
-          <span style="font-family:var(--serif);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,0.35)">Film</span>
-        </div>
+        <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434006/IMG_5745.JPG_l2dgau.jpg" alt="Film" loading="lazy" style="width:100%;height:100%;object-fit:cover;">
       </div>
     </div>
   </div>
@@ -1624,117 +1675,81 @@
 
   <div class="masonry" id="gallery-grid">
 
-    <!-- LIFESTYLE -->
-    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:320px;background:linear-gradient(160deg,#c8bfb4,#a09080);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Lifestyle</span>
-      </div>
+    <!-- ════════════ LIFESTYLE ════════════ -->
+    <div class="masonry-item tall" data-cat="lifestyle" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434056/IMG_9665.JPG_j055te.jpg" alt="Lifestyle 1" loading="lazy">
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item land" data-cat="lifestyle" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434064/IMG_9974.JPG_df0ig0.jpg" alt="Lifestyle 2" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
     <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:380px;background:linear-gradient(160deg,#d0c8bc,#b0a898);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434065/IMG_0326.JPG_frxee5.jpg" alt="Lifestyle 3" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
     <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:260px;background:linear-gradient(160deg,#c0b8ac,#a09890);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434048/IMG_8413.JPG_jt2ngp.jpg" alt="Lifestyle 4" loading="lazy">
+      <div class="overlay"><span>Lifestyle</span></div>
+    </div>
+    <div class="masonry-item sm" data-cat="lifestyle" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433991/IMG_0483.JPG_vpgbky.jpg" alt="Lifestyle 5" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
     <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:360px;background:linear-gradient(160deg,#d6cdc0,#b4a896);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433999/IMG_0460.JPG_1_ufcizs.jpg" alt="Lifestyle 6" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
-    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:300px;background:linear-gradient(160deg,#e0d8cc,#c4b8a8);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
+    <div class="masonry-item tall" data-cat="lifestyle" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434021/IMG_6742.JPG_drqrd3.jpg" alt="Lifestyle 7" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
-    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:420px;background:linear-gradient(160deg,#bbb0a4,#948880);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.5);text-transform:uppercase">Lifestyle</span>
-      </div>
-      <div class="overlay"><span>Lifestyle</span></div>
-    </div>
-    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:280px;background:linear-gradient(160deg,#ccc4b8,#a89e94);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
-      <div class="overlay"><span>Lifestyle</span></div>
-    </div>
-    <div class="masonry-item" data-cat="lifestyle" onclick="openLightbox(this)">
-      <div style="height:340px;background:linear-gradient(160deg,#d8d0c4,#b8ac9e);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(0,0,0,0.3);text-transform:uppercase">Lifestyle</span>
-      </div>
+    <div class="masonry-item sm" data-cat="lifestyle" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434063/IMG_9663.JPG_jb7rhq.jpg" alt="Lifestyle 8" loading="lazy">
       <div class="overlay"><span>Lifestyle</span></div>
     </div>
 
-    <!-- PORTRAIT -->
+    <!-- ════════════ PORTRAIT ════════════ -->
     <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:420px;background:linear-gradient(160deg,#b0a898,#8a7e72);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434043/089A2542.JPG_ux0cvw.jpg" alt="Portrait 1" loading="lazy">
       <div class="overlay"><span>Portrait</span></div>
     </div>
     <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:360px;background:linear-gradient(160deg,#a89e94,#8a8078);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434031/IMG_8566.JPG_ozmbah.jpg" alt="Portrait 2" loading="lazy">
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item sm" data-cat="portrait" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434005/IMG_5739.JPG_h9a6sv.jpg" alt="Portrait 3" loading="lazy">
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item tall" data-cat="portrait" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434023/IMG_8573.JPG_v1p7qp.jpg" alt="Portrait 4" loading="lazy">
+      <div class="overlay"><span>Portrait</span></div>
+    </div>
+    <div class="masonry-item land" data-cat="portrait" onclick="openLightbox(this)">
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433998/IMG_8571.JPG_rinbjg.jpg" alt="Portrait 5" loading="lazy">
       <div class="overlay"><span>Portrait</span></div>
     </div>
     <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:300px;background:linear-gradient(160deg,#9c948a,#7a726a);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434006/IMG_8567.JPG_joarny.jpg" alt="Portrait 6" loading="lazy">
       <div class="overlay"><span>Portrait</span></div>
     </div>
     <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:400px;background:linear-gradient(160deg,#c0b4a8,#9c9088);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
-      <div class="overlay"><span>Portrait</span></div>
-    </div>
-    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:280px;background:linear-gradient(160deg,#908880,#6e6660);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
-      <div class="overlay"><span>Portrait</span></div>
-    </div>
-    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:460px;background:linear-gradient(160deg,#b8b0a4,#908880);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
-      <div class="overlay"><span>Portrait</span></div>
-    </div>
-    <div class="masonry-item" data-cat="portrait" onclick="openLightbox(this)">
-      <div style="height:320px;background:linear-gradient(160deg,#a4988c,#827870);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.6);text-transform:uppercase">Portrait</span>
-      </div>
+      <img src="https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434036/IMG_0998.JPG_opkvb9.jpg" alt="Portrait 7" loading="lazy">
       <div class="overlay"><span>Portrait</span></div>
     </div>
 
-    <!-- FILM -->
-    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
-      <div style="height:300px;background:linear-gradient(160deg,#1a1a2e,#2a2a40);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
-      </div>
+    <!-- ════════════ FILM — replace src="YOUR_IMAGE_URL_HERE" ════════════ -->
+    <div class="masonry-item sm" data-cat="film" onclick="openLightbox(this)">
+      <img src="YOUR_IMAGE_URL_HERE" alt="Film 1" loading="lazy">
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item land" data-cat="film" onclick="openLightbox(this)">
+      <img src="YOUR_IMAGE_URL_HERE" alt="Film 2" loading="lazy">
       <div class="overlay"><span>Film</span></div>
     </div>
     <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
-      <div style="height:340px;background:linear-gradient(160deg,#222238,#1a1a30);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
-      </div>
-      <div class="overlay"><span>Film</span></div>
-    </div>
-    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
-      <div style="height:280px;background:linear-gradient(160deg,#1e1e30,#2c2c45);display:flex;align-items:center;justify-content:center;">
-        <span style="font-family:var(--serif);font-size:12px;letter-spacing:3px;color:rgba(255,255,255,0.4);text-transform:uppercase">Film</span>
-      </div>
+      <img src="YOUR_IMAGE_URL_HERE" alt="Film 3" loading="lazy">
       <div class="overlay"><span>Film</span></div>
     </div>
 
@@ -2082,12 +2097,13 @@
   }, { threshold: 0.12 });
   initReveal();
 
-  // Gallery filter
+  // Gallery filter — hide/show without breaking grid
   function filterGallery(cat, btn) {
     document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
     btn.classList.add('active');
     document.querySelectorAll('.masonry-item').forEach(item => {
-      item.style.display = (cat === 'all' || item.dataset.cat === cat) ? 'block' : 'none';
+      const show = cat === 'all' || item.dataset.cat === cat;
+      item.style.display = show ? '' : 'none';
     });
   }
 
@@ -2114,14 +2130,46 @@
 
     window.open('https://wa.me/447342288816?text=' + encodeURIComponent(text), '_blank');
   }
+  let lightboxItems = [];
+  let lightboxIndex = 0;
+
   function openLightbox(el) {
+    // Only cycle through items currently visible under the active filter
+    lightboxItems = Array.from(document.querySelectorAll('.masonry-item')).filter(
+      item => item.style.display !== 'none'
+    );
+    lightboxIndex = lightboxItems.indexOf(el);
+    showLightboxImage();
     document.getElementById('lightbox').classList.add('open');
   }
+
+  function showLightboxImage() {
+    const el = lightboxItems[lightboxIndex];
+    if (!el) return;
+    const img = el.querySelector('img');
+    if (img) {
+      document.getElementById('lightbox-img').src = img.src;
+      document.getElementById('lightbox-img').alt = img.alt;
+    }
+  }
+
+  function navigateLightbox(dir) {
+    if (!lightboxItems.length) return;
+    lightboxIndex = (lightboxIndex + dir + lightboxItems.length) % lightboxItems.length;
+    showLightboxImage();
+  }
+
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open');
   }
   document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
+  });
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'ArrowLeft') navigateLightbox(-1);
+    if (e.key === 'ArrowRight') navigateLightbox(1);
+    if (e.key === 'Escape') closeLightbox();
   });
 </script>
 </body>
