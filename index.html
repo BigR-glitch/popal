@@ -650,7 +650,8 @@
     grid-row: span 48;
   }
 
-  .masonry-item img {
+  .masonry-item img,
+  .masonry-item video {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -659,7 +660,8 @@
     filter: grayscale(8%);
   }
 
-  .masonry-item:hover img {
+  .masonry-item:hover img,
+  .masonry-item:hover video {
     transform: scale(1.05);
     filter: grayscale(0%);
   }
@@ -1193,7 +1195,8 @@
 
   #lightbox.open { display: flex; }
 
-  #lightbox img {
+  #lightbox img,
+  #lightbox video {
     max-width: 85vw;
     max-height: 85vh;
     object-fit: contain;
@@ -1317,7 +1320,7 @@
 
   .pricing-header {
     text-align: center;
-    margin-bottom: 72px;
+    margin-bottom: 80px;
   }
 
   .pricing-header .section-eyebrow { color: rgba(255,255,255,0.35); }
@@ -1327,176 +1330,165 @@
     font-size: clamp(40px, 5vw, 64px);
   }
 
-  .pricing-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    max-width: 1100px;
-    margin: 0 auto;
+  .pricing-header .pricing-intro {
+    font-family: var(--sans);
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 16px;
+    text-transform: uppercase;
   }
 
-  .pricing-card {
-    background: #141414;
-    border: 0.5px solid rgba(255,255,255,0.08);
-    padding: 48px 40px 40px;
-    position: relative;
+  .pricing-table {
+    max-width: 860px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    transition: border-color 0.3s;
   }
 
-  .pricing-card:hover {
-    border-color: rgba(255,255,255,0.18);
+  .pricing-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 36px 0;
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    gap: 40px;
+    position: relative;
   }
 
-  .pricing-card.featured {
-    border-color: rgba(255,255,255,0.22);
-    background: #191919;
-  }
-
-  .pricing-badge {
+  .pricing-row::before {
+    content: '';
     position: absolute;
-    top: -1px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: -48px; right: -48px; top: 0; bottom: 0;
+    background: rgba(255,255,255,0.02);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .pricing-row:hover::before { opacity: 1; }
+
+  .pricing-row.featured-row { padding: 48px 0; }
+
+  .pricing-row-left { display: flex; flex-direction: column; gap: 8px; }
+
+  .pricing-tier-label {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+  }
+
+  .pricing-tier-name {
+    font-family: var(--serif);
+    font-size: clamp(28px, 3vw, 38px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .pricing-tier-name em {
+    font-style: italic;
+    color: rgba(255,255,255,0.55);
+  }
+
+  .pricing-tier-desc {
+    font-family: var(--sans);
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.35);
+    margin-top: 4px;
+    line-height: 1.7;
+  }
+
+  .pricing-divider {
+    width: 40px;
+    height: 0.5px;
+    background: rgba(255,255,255,0.12);
+    margin: 12px 0 4px;
+  }
+
+  .pricing-row-right {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .pricing-amount-main {
+    font-family: var(--serif);
+    font-size: clamp(36px, 4vw, 52px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -1px;
+  }
+
+  .pricing-amount-main .cur {
+    font-size: 0.55em;
+    vertical-align: super;
+    font-weight: 400;
+    opacity: 0.65;
+    letter-spacing: 0;
+  }
+
+  .pricing-duration {
+    font-family: var(--sans);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.28);
+    margin-top: 6px;
+  }
+
+  .pricing-featured-pill {
+    display: inline-block;
     font-family: var(--sans);
     font-size: 8px;
     letter-spacing: 3px;
     text-transform: uppercase;
     color: var(--black);
     background: var(--white);
-    padding: 6px 18px;
+    padding: 4px 12px;
+    margin-bottom: 10px;
   }
 
-  .pricing-icon {
-    font-size: 28px;
-    margin-bottom: 24px;
-    line-height: 1;
-  }
-
-  .pricing-name {
-    font-family: var(--serif);
-    font-size: 32px;
-    font-weight: 300;
-    color: var(--white);
-    margin-bottom: 8px;
-  }
-
-  .pricing-tagline {
-    font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: rgba(255,255,255,0.35);
-    margin-bottom: 32px;
-    line-height: 1.6;
-  }
-
-  .pricing-price-row {
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
-    margin-bottom: 32px;
-    padding-bottom: 32px;
-    border-bottom: 0.5px solid rgba(255,255,255,0.08);
-  }
-
-  .pricing-currency {
-    font-family: var(--sans);
-    font-size: 11px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.4);
-    text-transform: uppercase;
-  }
-
-  .pricing-amount {
-    font-family: var(--serif);
-    font-size: 56px;
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1;
-  }
-
-  .pricing-per {
-    font-family: var(--sans);
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: rgba(255,255,255,0.3);
-    text-transform: uppercase;
-  }
-
-  .pricing-features {
-    list-style: none;
-    flex: 1;
-    margin-bottom: 40px;
-  }
-
-  .pricing-features li {
-    font-family: var(--sans);
-    font-size: 12px;
-    letter-spacing: 0.5px;
-    line-height: 1.6;
-    color: rgba(255,255,255,0.55);
-    padding: 9px 0;
-    border-bottom: 0.5px solid rgba(255,255,255,0.05);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .pricing-features li::before {
-    content: '✦';
-    font-size: 7px;
-    color: rgba(255,255,255,0.25);
-    flex-shrink: 0;
-  }
-
-  .pricing-features li.muted {
-    color: rgba(255,255,255,0.18);
-  }
-
-  .pricing-features li.muted::before {
-    content: '—';
-    color: rgba(255,255,255,0.12);
-  }
-
-  .pricing-btn {
-    font-family: var(--sans);
-    font-size: 10px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+  .pricing-cta-wrap {
     text-align: center;
-    padding: 16px;
-    text-decoration: none;
-    cursor: pointer;
-    border: none;
-    transition: all 0.3s;
-    display: block;
+    margin-top: 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
   }
 
-  .pricing-btn-outline {
-    color: rgba(255,255,255,0.6);
-    border: 0.5px solid rgba(255,255,255,0.2);
-    background: transparent;
+  .pricing-cta-note {
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.25);
   }
 
-  .pricing-btn-outline:hover {
-    background: rgba(255,255,255,0.06);
-    color: var(--white);
-    border-color: rgba(255,255,255,0.4);
-  }
-
-  .pricing-btn-solid {
+  .pricing-cta-btn {
+    display: inline-block;
+    font-family: var(--sans);
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
     color: var(--black);
     background: var(--white);
+    padding: 18px 48px;
+    text-decoration: none;
+    transition: background 0.3s;
   }
 
-  .pricing-btn-solid:hover {
-    background: var(--off-white);
-  }
+  .pricing-cta-btn:hover { background: rgba(255,255,255,0.88); }
 
-  @media (max-width: 900px) {
-    .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
-    #pricing-section { padding: 100px 24px 72px; }
+  @media (max-width: 640px) {
+    #pricing-section { padding: 80px 24px 72px; }
+    .pricing-row { grid-template-columns: 1fr; gap: 20px; padding: 32px 0; }
+    .pricing-row::before { left: -24px; right: -24px; }
+    .pricing-row-right { text-align: left; }
   }
 </style>
 </head>
@@ -1519,6 +1511,7 @@
   <button id="lightbox-close" onclick="closeLightbox()">Close ×</button>
   <button id="lightbox-prev" class="lightbox-nav" onclick="navigateLightbox(-1)" aria-label="Previous image">‹</button>
   <img id="lightbox-img" src="" alt="">
+  <video id="lightbox-video" controls style="display:none;"></video>
   <button id="lightbox-next" class="lightbox-nav" onclick="navigateLightbox(1)" aria-label="Next image">›</button>
 </div>
 
@@ -1553,9 +1546,9 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-slides" id="heroSlides">
-    <div class="hero-slide active" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434048/089A5869.JPG_nvhbqf.jpg');"></div>
+    <div class="hero-slide active" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782525821/IMG_9903.JPG_ynogpz.jpg');"></div>
     <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434053/IMG_8678.JPG_dwjj8j.jpg');"></div>
-    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782433999/IMG_5743.JPG_nfnzga.jpg');"></div>
+    <div class="hero-slide" style="background-image: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.25) 60%), url('https://res.cloudinary.com/dsrigtvy4/image/upload/v1782434048/089A5869.JPG_nvhbqf.jpg');"></div>
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -1741,15 +1734,27 @@
 
     <!-- ════════════ FILM — replace src="YOUR_IMAGE_URL_HERE" ════════════ -->
     <div class="masonry-item sm" data-cat="film" onclick="openLightbox(this)">
-      <img src="YOUR_IMAGE_URL_HERE" alt="Film 1" loading="lazy">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782526038/IMG_0126_uwrlbh.mov" muted loop autoplay playsinline preload="metadata"></video>
       <div class="overlay"><span>Film</span></div>
     </div>
     <div class="masonry-item land" data-cat="film" onclick="openLightbox(this)">
-      <img src="YOUR_IMAGE_URL_HERE" alt="Film 2" loading="lazy">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782526041/IMG_3135_yqnohu.mov" muted loop autoplay playsinline preload="metadata"></video>
       <div class="overlay"><span>Film</span></div>
     </div>
     <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
-      <img src="YOUR_IMAGE_URL_HERE" alt="Film 3" loading="lazy">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782525833/IMG_8347_k3cfu4.mov" muted loop autoplay playsinline preload="metadata"></video>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item tall" data-cat="film" onclick="openLightbox(this)">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782525996/IMG_5752_cdk7v1.mp4" muted loop autoplay playsinline preload="metadata"></video>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item" data-cat="film" onclick="openLightbox(this)">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782525997/IMG_0249_s27d4s.mov" muted loop autoplay playsinline preload="metadata"></video>
+      <div class="overlay"><span>Film</span></div>
+    </div>
+    <div class="masonry-item sm" data-cat="film" onclick="openLightbox(this)">
+      <video src="https://res.cloudinary.com/dsrigtvy4/video/upload/v1782526007/IMG_8683_tazk2l.mov" muted loop autoplay playsinline preload="metadata"></video>
       <div class="overlay"><span>Film</span></div>
     </div>
 
@@ -1889,77 +1894,101 @@
 <!-- ══ PRICING PAGE ══ -->
 <div class="page" id="page-pricing">
 <section id="pricing-section">
+
   <div class="pricing-header reveal">
     <p class="section-eyebrow">Investment</p>
-    <h2 class="section-title">Choose Your <em>Experience</em></h2>
+    <h2 class="section-title">Session <em>Pricing</em></h2>
+    <p class="pricing-intro">London · Starting from £350</p>
   </div>
 
-  <div class="pricing-grid">
+  <div class="pricing-table">
 
-    <!-- Essentials -->
-    <div class="pricing-card reveal">
-      <div class="pricing-icon">🌿</div>
-      <div class="pricing-name">Essentials</div>
-      <div class="pricing-tagline">Perfect for portrait sessions &amp; quick shoots</div>
-      <div class="pricing-price-row">
-        <span class="pricing-currency">GH₵</span>
-        <span class="pricing-amount">800</span>
-        <span class="pricing-per">/ session</span>
+    <div class="pricing-row reveal">
+      <div class="pricing-row-left">
+        <span class="pricing-tier-label">01 — Quick Premium</span>
+        <div class="pricing-tier-name">The <em>Quick Set</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">A focused, high-quality shoot. Perfect for headshots,<br>social content &amp; personal branding.</p>
       </div>
-      <ul class="pricing-features">
-        <li>2-hour studio session</li>
-        <li>1 outfit / look</li>
-        <li>20 edited digital images</li>
-        <li>Online gallery delivery</li>
-        <li class="muted">Location shoot</li>
-        <li class="muted">Print products</li>
-      </ul>
-      <a href="#" class="pricing-btn pricing-btn-outline" onclick="showPage('contact'); return false;">Book Now</a>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>350</div>
+        <div class="pricing-duration">Starting Price</div>
+      </div>
     </div>
 
-    <!-- Signature -->
-    <div class="pricing-card featured reveal">
-      <div class="pricing-badge">Most Popular</div>
-      <div class="pricing-icon">✦</div>
-      <div class="pricing-name">Signature</div>
-      <div class="pricing-tagline">Our most sought-after experience</div>
-      <div class="pricing-price-row">
-        <span class="pricing-currency">GH₵</span>
-        <span class="pricing-amount">2,200</span>
-        <span class="pricing-per">/ session</span>
+    <div class="pricing-row reveal">
+      <div class="pricing-row-left">
+        <span class="pricing-tier-label">02 — Portrait Session</span>
+        <div class="pricing-tier-name">The <em>Quarter Hour</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">Intimate &amp; intentional. Ideal for couples, families<br>or creatives needing standout shots.</p>
       </div>
-      <ul class="pricing-features">
-        <li>Full-day session (8 hours)</li>
-        <li>Multiple looks / locations</li>
-        <li>60 fully edited images</li>
-        <li>Online gallery + USB</li>
-        <li>Styling consultation</li>
-        <li>1 fine-art print included</li>
-      </ul>
-      <a href="#" class="pricing-btn pricing-btn-solid" onclick="showPage('contact'); return false;">Book Now</a>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>600</div>
+        <div class="pricing-duration">15 Minutes</div>
+      </div>
     </div>
 
-    <!-- Bespoke -->
-    <div class="pricing-card reveal">
-      <div class="pricing-icon">👑</div>
-      <div class="pricing-name">Bespoke</div>
-      <div class="pricing-tagline">Tailored for corporate events &amp; large bookings</div>
-      <div class="pricing-price-row">
-        <span class="pricing-currency">GH₵</span>
-        <span class="pricing-amount" style="font-size:44px;">Custom</span>
+    <div class="pricing-row featured-row reveal">
+      <div class="pricing-row-left">
+        <div class="pricing-featured-pill">Most Booked</div>
+        <span class="pricing-tier-label">03 — Signature Session</span>
+        <div class="pricing-tier-name">The <em>Golden Hour</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">Our most popular experience. Room for multiple looks,<br>locations &amp; creative direction.</p>
       </div>
-      <ul class="pricing-features">
-        <li>Unlimited session time</li>
-        <li>Full creative direction</li>
-        <li>Unlimited edited images</li>
-        <li>Luxury album + prints</li>
-        <li>Dedicated project manager</li>
-        <li>Multi-photographer team available</li>
-      </ul>
-      <a href="#" class="pricing-btn pricing-btn-outline" onclick="showPage('contact'); return false;">Contact Us</a>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>1,400</div>
+        <div class="pricing-duration">1 Hour</div>
+      </div>
+    </div>
+
+    <div class="pricing-row reveal">
+      <div class="pricing-row-left">
+        <span class="pricing-tier-label">04 — Extended Session</span>
+        <div class="pricing-tier-name">The <em>Double</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">More time, more looks, more story. Great for editorial<br>shoots, campaigns &amp; special occasions.</p>
+      </div>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>2,000</div>
+        <div class="pricing-duration">2 Hours</div>
+      </div>
+    </div>
+
+    <div class="pricing-row reveal">
+      <div class="pricing-row-left">
+        <span class="pricing-tier-label">05 — Half Day</span>
+        <div class="pricing-tier-name">The <em>Half Day</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">Full creative freedom across multiple locations.<br>Suited for brand campaigns &amp; events.</p>
+      </div>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>3,200</div>
+        <div class="pricing-duration">4 Hours</div>
+      </div>
+    </div>
+
+    <div class="pricing-row reveal">
+      <div class="pricing-row-left">
+        <span class="pricing-tier-label">06 — Full Experience</span>
+        <div class="pricing-tier-name">The <em>Full Day</em></div>
+        <div class="pricing-divider"></div>
+        <p class="pricing-tier-desc">An immersive all-day shoot. Complete creative direction,<br>unlimited looks &amp; premium delivery.</p>
+      </div>
+      <div class="pricing-row-right">
+        <div class="pricing-amount-main"><span class="cur">£</span>5,000</div>
+        <div class="pricing-duration">All Day</div>
+      </div>
     </div>
 
   </div>
+
+  <div class="pricing-cta-wrap reveal">
+    <p class="pricing-cta-note">Ready to book your session?</p>
+    <a href="#" class="pricing-cta-btn" onclick="showPage('contact'); return false;">Get in Touch</a>
+  </div>
+
 </section>
 </div><!-- end #page-pricing -->
 
@@ -2146,10 +2175,21 @@
   function showLightboxImage() {
     const el = lightboxItems[lightboxIndex];
     if (!el) return;
-    const img = el.querySelector('img');
-    if (img) {
-      document.getElementById('lightbox-img').src = img.src;
-      document.getElementById('lightbox-img').alt = img.alt;
+    const media = el.querySelector('img, video');
+    const imgEl = document.getElementById('lightbox-img');
+    const videoEl = document.getElementById('lightbox-video');
+    videoEl.pause();
+    if (media && media.tagName === 'VIDEO') {
+      videoEl.src = media.currentSrc || media.src;
+      videoEl.style.display = 'block';
+      imgEl.style.display = 'none';
+      videoEl.play();
+    } else if (media) {
+      imgEl.src = media.src;
+      imgEl.alt = media.alt;
+      imgEl.style.display = 'block';
+      videoEl.style.display = 'none';
+      videoEl.removeAttribute('src');
     }
   }
 
@@ -2161,6 +2201,7 @@
 
   function closeLightbox() {
     document.getElementById('lightbox').classList.remove('open');
+    document.getElementById('lightbox-video').pause();
   }
   document.getElementById('lightbox').addEventListener('click', function(e) {
     if (e.target === this) closeLightbox();
